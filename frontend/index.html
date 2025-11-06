@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 Music Recommender - Sistema de Recomendación Musical</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🎵</span>
+                    <h1>Music Recommender</h1>
+                </div>
+                <nav class="nav">
+                    <a href="#home" class="nav-link active">Inicio</a>
+                    <a href="#rate" class="nav-link">Calificar</a>
+                    <a href="#recommendations" class="nav-link">Recomendaciones</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2 class="hero-title">Descubre Tu Música Perfecta</h2>
+                <p class="hero-subtitle">Califica tus canciones favoritas y recibe recomendaciones personalizadas usando inteligencia artificial</p>
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <span class="stat-icon">🎼</span>
+                        <div class="stat-info">
+                            <p class="stat-number" id="total-songs">-</p>
+                            <p class="stat-label">Canciones</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon">👥</span>
+                        <div class="stat-info">
+                            <p class="stat-number" id="total-users">-</p>
+                            <p class="stat-label">Usuarios</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon">⭐</span>
+                        <div class="stat-info">
+                            <p class="stat-number" id="avg-rating">-</p>
+                            <p class="stat-label">Rating Promedio</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-lg" onclick="scrollToSection('rate')">
+                    Comenzar a Calificar 
+                    <span class="btn-icon">→</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rating Section -->
+    <section id="rate" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Califica Tus Canciones</h2>
+                <p class="section-subtitle">Califica al menos 10 canciones para obtener recomendaciones precisas</p>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-info">
+                    <span>Progreso: <strong id="rated-count">0</strong> canciones calificadas</span>
+                    <span id="progress-percentage">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="controls">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" placeholder="Buscar canciones..." class="search-input">
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">Todas</button>
+                    <button class="filter-btn" data-filter="rated">Calificadas</button>
+                    <button class="filter-btn" data-filter="unrated">Sin Calificar</button>
+                </div>
+            </div>
+
+            <!-- Songs Grid -->
+            <div class="songs-grid" id="songs-grid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Cargando canciones...</p>
+                </div>
+            </div>
+
+            <!-- Get Recommendations Button -->
+            <div class="action-container">
+                <button class="btn btn-success btn-lg" id="get-recommendations-btn" disabled>
+                    <span class="btn-icon">✨</span>
+                    Obtener Recomendaciones
+                </button>
+                <p class="hint" id="recommendations-hint">Califica al menos 10 canciones para continuar</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommendations Section -->
+    <section id="recommendations" class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tus Recomendaciones</h2>
+                <p class="section-subtitle">Basadas en tu perfil musical único</p>
+            </div>
+
+            <!-- Results Container -->
+            <div id="results-container" class="results-hidden">
+                
+                <!-- User Profile Card -->
+                <div class="profile-card">
+                    <h3 class="profile-title">Tu Perfil Musical</h3>
+                    <div class="profile-content">
+                        <div class="profile-badge">
+                            <span class="badge-icon" id="category-icon">🎭</span>
+                            <div class="badge-info">
+                                <p class="badge-label">Categoría</p>
+                                <p class="badge-value" id="user-category">-</p>
+                            </div>
+                        </div>
+                        <div class="profile-stats">
+                            <div class="profile-stat">
+                                <span class="stat-label">Similitud</span>
+                                <span class="stat-value" id="similarity-score">-</span>
+                            </div>
+                            <div class="profile-stat">
+                                <span class="stat-label">Rating Vecindario</span>
+                                <span class="stat-value" id="neighborhood-rating">-</span>
+                            </div>
+                            <div class="profile-stat">
+                                <span class="stat-label">Canciones Evaluadas</span>
+                                <span class="stat-value" id="songs-evaluated">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommendations List -->
+                <div class="recommendations-list" id="recommendations-list">
+                    <!-- Las recomendaciones se insertarán aquí dinámicamente -->
+                </div>
+
+                <!-- Actions -->
+                <div class="action-container">
+                    <button class="btn btn-outline" onclick="scrollToSection('rate')">
+                        <span class="btn-icon">←</span>
+                        Calificar Más Canciones
+                    </button>
+                    <button class="btn btn-primary" onclick="resetRatings()">
+                        <span class="btn-icon">🔄</span>
+                        Comenzar de Nuevo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="empty-state">
+                <span class="empty-icon">🎵</span>
+                <h3>Aún no tienes recomendaciones</h3>
+                <p>Califica algunas canciones para recibir sugerencias personalizadas</p>
+                <button class="btn btn-primary" onclick="scrollToSection('rate')">
+                    Comenzar a Calificar
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Music Recommender</h4>
+                    <p>Sistema de recomendación usando KNN y similitud del coseno</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Tecnología</h4>
+                    <p>Implementado desde cero sin librerías de ML</p>
+                    <p>K-Nearest Neighbors + Filtrado Colaborativo</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Integrantes</h4>
+                    <p>[AGREGAR NOMBRES]</p>
+                    <p>Noviembre 2025</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Music Recommender. Proyecto Académico.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
