@@ -13,7 +13,7 @@
 // - Desarrollo local: 'http://localhost:5000'
 // - Docker local: 'http://localhost:5000'
 // - Producción: URL de tu servidor
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://music-recommender-api-ojm4.onrender.com';
 
 // Estado global de la aplicación
 const state = {
